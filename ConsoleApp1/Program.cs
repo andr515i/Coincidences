@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ConsoleApp1
+
+
+namespace Tilfældigheder
 {
 	internal class Program
 	{
@@ -36,9 +32,32 @@ namespace ConsoleApp1
 
 
 			Console.WriteLine("øvelse 3:");
-            // Using a lambda expression so that i can run my methods with their parameters.
-            RunBenchmark((param) => RandomUsingRandom(param), "RandomUsingRandom", 1_000_000);
+			//Using a lambda expression so that i can run my methods with their parameters.
+			RunBenchmark((param) => RandomUsingRandom(param), "RandomUsingRandom", 1_000_000);
 			RunBenchmark((param) => RandomUsingCrypto(param), "RandomUsingCrypto", 1_000_000);
+
+
+
+			Console.WriteLine("øvelse 4");
+
+			Encrypter encrypter = new Encrypter();
+			Stopwatch sw = new Stopwatch();
+
+			string encryptTest = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ";
+			string encryptedTest = encrypter.Encrypt(encryptTest);
+
+
+			Console.WriteLine($"original: {encryptTest} | encrypted: {encryptedTest} | decrypted: {encrypter.Decrypt(encryptedTest)}");
+
+
+			sw.Start();
+			encryptTest = encrypter.Encrypt(encryptedTest);
+			sw.Stop();
+			Console.WriteLine($"ticks elapsed for encrypting: {sw.ElapsedTicks}");
+			sw.Start();
+			encryptTest = encrypter.Decrypt(encryptedTest);
+			sw.Stop();
+            Console.WriteLine($"ticks elapsed for decrypting: {sw.ElapsedTicks}");
 
 
 
@@ -99,7 +118,7 @@ namespace ConsoleApp1
 			sw.Stop();
 
 
-			Console.WriteLine($"{methodName} tid (ms): {sw.ElapsedMilliseconds}");
+			Console.WriteLine($"{methodName} tid (ticks): {sw.ElapsedTicks}");
 
 		}
 
